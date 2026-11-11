@@ -1,4 +1,6 @@
 import requests
+import time
+from bs4 import BeautifulSoup
 
 url = "https://books.toscrape.com/"
 
@@ -9,7 +11,7 @@ print(response.status_code)
 
 print(response.text[:500])
 
-from bs4 import BeautifulSoup
+
 
 soup = BeautifulSoup(response.text, "html.parser")
 
@@ -53,4 +55,12 @@ def parse_books(books):
 
     return result
 
-print(parse_books(books))
+# for page in range(1, 4):
+#     url = f"https://books.toscrape.com/catalogue/page-{page}.html"
+#     print(url)
+
+
+
+
+
+
