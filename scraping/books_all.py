@@ -1,6 +1,8 @@
 import requests
 import time
+import csv
 from bs4 import BeautifulSoup
+
 
 
 RATINGS = {"One": 1, "Two": 2, "Three": 3, "Four": 4, "Five": 5}
@@ -8,10 +10,12 @@ def parse_books(books):
     result = []
     for book in books:
         title = book.h3.a["title"]
+        url = "https://books.toscrape.com/catalogue/" + book.h3.a["href"]
         price = float(book.find("p", class_= "price_color").text.replace("£", ""))
         availability = book.find("p", class_="availability").text.strip()
         rating = book.find("p", class_ = "star-rating")["class"][1]
         result.append({
+            "url": url,
             "title" : title,
             "price" : price,
             "availability": availability,
@@ -41,5 +45,11 @@ for page in range(1, 51):
 
 titles = []
 for book in all_books:
-    titles.append(book["title"])
+    titles.append(book["url"])
 print(len(set(titles)))
+
+
+with open("books.csv", "w", newline = "", encoding="utf-8") as f:
+    writer = csv.DictWriter(f, fieldnames=["url", "title", "price", "availability", "rating"])
+    writer.writeheader()         
+    writer.writerows(all_books)
